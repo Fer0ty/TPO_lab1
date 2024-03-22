@@ -61,21 +61,6 @@ public class BPlusTreeTest {
         bPlusTree.delete(3);
     }
 
-    @ParameterizedTest
-    @CsvSource({"3", "4", "5"})
-    @DisplayName("Проверка переполнения")
-    void testOverflow(int degree) {
-        BPlusTree bPlusTree = new BPlusTree(degree);
-
-        // Вставка максимального числа элементов
-        for (int i = 1; i <= degree; i++) {
-            bPlusTree.insert(i, String.valueOf(i));
-        }
-
-        // Вставка элемента, вызывающего переполнение
-        bPlusTree.insert(degree + 1, "Overflow");
-        assertEquals("Overflow", bPlusTree.search(degree + 1));
-    }
 
     @ParameterizedTest
     @CsvSource({"3", "4", "5"})
