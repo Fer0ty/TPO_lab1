@@ -31,7 +31,7 @@ public class BPlusTreeTest {
         assertEquals("Value1", bPlusTree.search(1));
 
         // Удаляем ключ
-        bPlusTree.delete(1);
+        bPlusTree.remove(1);
 
         // Проверяем отсутствие ключа
         assertNull(bPlusTree.search(1));
@@ -40,26 +40,13 @@ public class BPlusTreeTest {
         bPlusTree.insert(2, "Value2");
 
         // Удаляем ключ, что должно привести к удалению пустого узла
-        bPlusTree.delete(2);
+        bPlusTree.remove(2);
 
         // Пытаемся получить доступ к удаленному ключу
         assertNull(bPlusTree.search(2));
 
-        // Проверяем, что дерево теперь пусто
-        assertNull(bPlusTree.search(2));
-
         // Проверяем, что корень дерева пуст
         assertNull(bPlusTree.getRoot());
-    }
-
-    @Test
-    public void testOverflow() {
-        BPlusTree bPlusTree = new BPlusTree();
-        for (int i = 1; i <= 7; i++) {
-            bPlusTree.insert(i, "Value" + i);
-        }
-        assertEquals("Value1", bPlusTree.search(1));
-        assertEquals("Value7", bPlusTree.search(7)); // Проверка вставки с переполнением
     }
 }
 

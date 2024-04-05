@@ -1,7 +1,8 @@
 package org.example.task2;
 
+import java.util.ArrayList;
+import java.util.List;
 
-// B+ дерево
 public class BPlusTree {
     private BPlusTreeNode root;
 
@@ -11,7 +12,7 @@ public class BPlusTree {
 
     public void insert(int key, Object value) {
         if (root == null) {
-            root = new BPlusTreeNode();
+            root = new BPlusTreeNode(true, this);
         }
         root.insert(key, value);
     }
@@ -20,7 +21,7 @@ public class BPlusTree {
         return (root != null) ? root.search(key) : null;
     }
 
-    public void delete(int key) {
+    public void remove(int key) {
         if (root != null) {
             root.remove(key);
             if (root.isEmpty()) {
@@ -32,4 +33,9 @@ public class BPlusTree {
     public BPlusTreeNode getRoot() {
         return root;
     }
+
+    public void setRoot(BPlusTreeNode root) {
+        this.root = root;
+    }
+
 }
