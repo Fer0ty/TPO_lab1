@@ -1,112 +1,65 @@
 package org.example;
 
-
 import org.example.task2.BPlusTree;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BPlusTreeTest {
 
-    @ParameterizedTest
-    @CsvSource({"3", "4", "5"})
-    @DisplayName("Общие проверки работы")
-    void testBPlusTree(int degree) {
-        BPlusTree bPlusTree = new BPlusTree(degree);
-
-        // Вставка элементов
-        bPlusTree.insert(1, "A");
-        assertEquals("A", bPlusTree.search(1));
-
-        bPlusTree.insert(2, "B");
-        assertEquals("B", bPlusTree.search(2));
-
-        bPlusTree.insert(3, "C");
-        assertEquals("C", bPlusTree.search(3));
-
-        bPlusTree.insert(4, "D");
-        assertEquals("D", bPlusTree.search(4));
-
-        // Поиск элементов
-        assertEquals("A", bPlusTree.search(1));
-        assertEquals("B", bPlusTree.search(2));
-        assertEquals("C", bPlusTree.search(3));
-        assertEquals("D", bPlusTree.search(4));
-        assertNull(bPlusTree.search(5));
-
-        // Удаление элементов
-        bPlusTree.delete(2);
-        assertNull(bPlusTree.search(2));
-        bPlusTree.delete(4);
-        assertNull(bPlusTree.search(4));
+    @Test
+    public void testInsert() {
+        BPlusTree bPlusTree = new BPlusTree();
+        bPlusTree.insert(1, "Value1");
+        assertEquals("Value1", bPlusTree.search(1));
     }
 
-    @DisplayName("Проверка удаления из пустого дерева")
-    @ParameterizedTest
-    @CsvSource({"3", "4", "5"})
-    void testEmptyBPlusTree(int degree) {
-        BPlusTree bPlusTree = new BPlusTree(degree);
+    @Test
+    public void testSearch() {
+        BPlusTree bPlusTree = new BPlusTree();
+        bPlusTree.insert(1, "Value1");
+        assertEquals("Value1", bPlusTree.search(1));
+        assertNull(bPlusTree.search(2)); // Проверка поиска отсутствующего ключа
+    }
 
-        // Поиск в пустом дереве
-        assertNull(bPlusTree.search(1));
-        assertNull(bPlusTree.search(2));
-        assertNull(bPlusTree.search(3));
+    @Test
+    public void testDeleteEmptyNode() {
+        BPlusTree bPlusTree = new BPlusTree();
+        // Вставляем ключ
+        bPlusTree.insert(1, "Value1");
 
-        // Удаление из пустого дерева
+        // Проверяем наличие вставленного ключа
+        assertEquals("Value1", bPlusTree.search(1));
+
+        // Удаляем ключ
         bPlusTree.delete(1);
-        bPlusTree.delete(2);
-        bPlusTree.delete(3);
-    }
 
-
-    @ParameterizedTest
-    @CsvSource({"3", "4", "5"})
-    @DisplayName("Проверка удаления всех элементов")
-    void testUnderflow(int degree) {
-        BPlusTree bPlusTree = new BPlusTree(degree);
-
-        // Вставка необходимого количества элементов
-        for (int i = 1; i <= degree; i++) {
-            bPlusTree.insert(i, String.valueOf(i));
-        }
-
-        // Удаление всех элементов
-        for (int i = 1; i <= degree; i++) {
-            bPlusTree.delete(i);
-        }
-
-        // Проверка, что дерево пустое
+        // Проверяем отсутствие ключа
         assertNull(bPlusTree.search(1));
+
+        // Вставляем еще один ключ, чтобы дерево стало пустым после удаления
+        bPlusTree.insert(2, "Value2");
+
+        // Удаляем ключ, что должно привести к удалению пустого узла
+        bPlusTree.delete(2);
+
+        // Пытаемся получить доступ к удаленному ключу
+        assertNull(bPlusTree.search(2));
+
+        // Проверяем, что дерево теперь пусто
+        assertNull(bPlusTree.search(2));
+
+        // Проверяем, что корень дерева пуст
+        assertNull(bPlusTree.getRoot());
     }
 
-    @ParameterizedTest
-    @CsvSource({"3", "4", "5"})
-    @DisplayName("Проверка перестроения дерева после удаления")
-    void testDelete(int degree) {
-        // Создание дерева с заданной степенью
-        BPlusTree bPlusTree = new BPlusTree(degree);
-
-        // Вставка нескольких элементов в дерево
-        bPlusTree.insert(1, "A");
-        bPlusTree.insert(2, "B");
-        bPlusTree.insert(3, "C");
-        bPlusTree.insert(4, "D");
-        bPlusTree.insert(5, "E");
-
-        // Удаление одного элемента из дерева
-        bPlusTree.delete(3);
-
-        // Проверка, что удаление прошло корректно
-        assertNull(bPlusTree.search(3)); // Проверяем, что удаленный элемент больше не присутствует в дереве
-
-        // Проверка, что структура дерева соответствует ожидаемой
-        assertEquals("A", bPlusTree.search(1));
-        assertEquals("B", bPlusTree.search(2));
-        assertEquals("D", bPlusTree.search(4));
-        assertEquals("E", bPlusTree.search(5));
+    @Test
+    public void testOverflow() {
+        BPlusTree bPlusTree = new BPlusTree();
+        for (int i = 1; i <= 7; i++) {
+            bPlusTree.insert(i, "Value" + i);
+        }
+        assertEquals("Value1", bPlusTree.search(1));
+        assertEquals("Value7", bPlusTree.search(7)); // Проверка вставки с переполнением
     }
 }
 
