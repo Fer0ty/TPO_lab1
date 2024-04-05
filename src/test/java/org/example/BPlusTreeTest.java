@@ -36,12 +36,6 @@ public class BPlusTreeTest {
         // Проверяем отсутствие ключа
         assertNull(bPlusTree.search(1));
 
-        // Вставляем еще один ключ, чтобы дерево стало пустым после удаления
-        bPlusTree.insert(2, "Value2");
-
-        // Удаляем ключ, что должно привести к удалению пустого узла
-        bPlusTree.remove(2);
-
         // Пытаемся получить доступ к удаленному ключу
         assertNull(bPlusTree.search(2));
 

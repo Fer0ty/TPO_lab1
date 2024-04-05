@@ -1,8 +1,5 @@
 package org.example.task2;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class BPlusTree {
     private BPlusTreeNode root;
 
@@ -24,9 +21,9 @@ public class BPlusTree {
     public void remove(int key) {
         if (root != null) {
             root.remove(key);
-            if (root.isEmpty()) {
-                root = null;
-            }
+//            if (root.isEmpty()) {
+//                root = null;
+////            }
         }
     }
 
